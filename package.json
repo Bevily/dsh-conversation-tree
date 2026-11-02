@@ -1,0 +1,63 @@
+{
+  "name": "dsh-conversation-tree",
+  "version": "1.0.6",
+  "private": true,
+  "description": "Native, writable conversation branches for DeepSeek Harness",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "src/host",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "docs/validation.md",
+    "docs/images"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check index.js && node --check client.js",
+    "pack": "npm run build && npm run check && npm test && node scripts/pack.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-sidebar-right"
+      ]
+    },
+    "engines": {
+      "dsh": ">=0.2.1-rc.5 <0.3.0"
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bevily/dsh-conversation-tree.git"
+  },
+  "homepage": "https://github.com/Bevily/dsh-conversation-tree#readme",
+  "bugs": {
+    "url": "https://github.com/Bevily/dsh-conversation-tree/issues"
+  }
+}

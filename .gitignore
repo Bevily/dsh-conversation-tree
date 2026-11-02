@@ -1,0 +1,27 @@
+# Dependencies and extracted host runtime
+node_modules/
+.cache/
+
+# Local profiles, credentials and session data
+.test-profile/
+.dsh/
+.env
+.env.*
+!.env.example
+.npmrc
+*.pem
+*.key
+
+# Release artifacts are attached to GitHub Releases, not source control
+/dist/
+
+# Historical local screenshots; reviewed public images live in docs/images/
+/docs/screenshots/
+
+# OS, editor and diagnostic files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+coverage/

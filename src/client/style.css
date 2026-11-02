@@ -1,0 +1,94 @@
+/* Native DSH tokens take precedence; restrained Swiss fallback for new controls. */
+.ct-button,.ct-tree,.ct-selection,.ct-native{font-family:var(--dsw-font-family,"Helvetica Neue",sans-serif);color:var(--dsw-alias-label-primary,#202124);font-size:13px;box-sizing:border-box}
+.ct-button{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:4px 8px;min-height:28px;border:0;border-radius:var(--dsw-radius-sm,4px);background:transparent;color:var(--dsw-alias-label-secondary,#60646c);font:inherit;cursor:pointer;white-space:nowrap}
+.ct-button:hover,.ct-tree-link:hover{background:var(--dsw-alias-interactive-bg-hover,#f7f7f8)}
+.ct-button:focus-visible,.ct-tree-link:focus-visible{outline:2px solid var(--dsw-alias-state-business-primary,#002fa7);outline-offset:2px}
+.ct-button:disabled{opacity:.5;cursor:wait}.ct-error{display:inline-block;color:var(--dsw-alias-state-error-primary,#b42318);font-size:12px;white-space:normal;padding:4px;max-width:300px}
+.ct-native{height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden;background:var(--dsw-alias-bg-base,#fff)}
+.ct-native>[data-slot]{min-height:0;flex:1}
+.ct-native [data-slot="conversation.input.model"],.ct-native [data-slot="conversation.input.permission"],.ct-native [data-slot="conversation.input.plan"]{display:none!important}
+.ct-native [class*="workspaceControl"],.ct-native [class*="workspaceSelector"]{display:none!important}
+.ct-state{padding:24px;color:var(--dsw-alias-label-secondary,#60646c)}
+.ct-float-actions,.ct-title-controls{display:inline-flex;align-items:center;gap:2px;flex:none}.ct-float-actions{margin-left:auto}.ct-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct-selection{position:fixed;z-index:1000;display:flex;align-items:center;padding:3px;border:1px solid var(--dsw-alias-border-l2,#ddd);border-radius:var(--dsw-radius-sm,4px);background:var(--dsw-alias-bg-base,#fff);max-width:min(420px,calc(100vw - 16px))}
+/* The page fills the native main slot; only the reading column is bounded. */
+.ct-tree{width:100%;flex:1;min-width:0;height:100%;overflow:auto;background:var(--dsw-alias-bg-base,#fff)}
+.ct-tree-content{box-sizing:border-box;width:100%;max-width:1120px;margin:0 auto;padding:40px 48px 32px}
+.ct-tree button,.ct-tree input{font:inherit}
+.ct-tree-header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:28px}
+.ct-tree h1{font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.4px;margin:0}
+.ct-tree-header p{margin:8px 0 0;color:var(--dsw-alias-label-secondary,#60646c);line-height:20px}
+.ct-refresh{width:32px;height:32px;border:1px solid var(--dsw-alias-border-l2,#e5e5e8);border-radius:var(--dsw-radius-md,8px)}
+.ct-tree-toolbar{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.ct-tree-search{display:flex;align-items:center;gap:8px;flex:1;min-width:0;min-height:38px;padding:0 10px;border:1px solid var(--dsw-alias-border-l2,#e5e5e8);border-radius:var(--dsw-radius-md,8px);color:var(--dsw-alias-label-tertiary,#8b8d94);background:var(--dsw-alias-bg-layer-1,#f7f7f8)}
+.ct-tree-search:focus-within{outline:2px solid var(--dsw-alias-state-business-primary,#4d6bfe);outline-offset:2px}
+.ct-tree-search input{width:100%;min-width:0;padding:9px 0;border:0;outline:none;background:transparent;color:var(--dsw-alias-label-primary,#202124);line-height:20px}
+.ct-tree-search input::placeholder{color:var(--dsw-alias-label-tertiary,#8b8d94)}
+.ct-tree-search input::-webkit-search-cancel-button{display:none}
+.ct-tree-search>.ct-button{padding:2px;min-height:24px}
+.ct-tree-expand{display:flex;gap:2px;flex-shrink:0}
+.ct-tree-meta{color:var(--dsw-alias-label-tertiary,#8b8d94);font-size:12px;line-height:20px;margin-bottom:12px}
+.ct-workspace{padding:8px 0 18px;border-bottom:1px solid var(--dsw-alias-border-l2,#e5e5e8);margin-bottom:12px}
+.ct-workspace-heading{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border:0;border-radius:var(--dsw-radius-md,8px);color:var(--dsw-alias-label-secondary,#60646c);background:transparent;text-align:left;cursor:pointer}
+.ct-workspace-heading:hover,.ct-tree-disclosure:hover,.ct-tree-row:hover{background:var(--dsw-alias-interactive-bg-hover,#f3f4f6)}
+.ct-workspace-name{color:var(--dsw-alias-label-primary,#202124);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct-workspace-count{margin-left:auto;font-size:12px;color:var(--dsw-alias-label-tertiary,#8b8d94);font-variant-numeric:tabular-nums}
+.ct-workspace-chevron{display:flex;width:14px;flex-shrink:0}
+.ct-workspace-chevron svg{width:14px;height:14px}
+.ct-workspace-heading[aria-expanded=true] .ct-workspace-chevron svg,.ct-tree-disclosure[aria-expanded=true] svg{transform:rotate(90deg)}
+.ct-tree ul{list-style:none;margin:0;padding:0}
+.ct-tree .ct-tree-roots{margin-top:5px}
+.ct-tree-row{display:flex;align-items:center;min-width:0;border-radius:var(--dsw-radius-md,8px);padding-left:8px}
+.ct-tree-disclosure,.ct-tree-disclosure-space{width:20px;height:28px;flex-shrink:0}
+.ct-tree-disclosure{display:flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:4px;color:var(--dsw-alias-label-tertiary,#8b8d94);cursor:pointer;padding:0}
+.ct-tree-disclosure svg{width:13px;height:13px}
+.ct-tree-link{display:flex;align-items:center;gap:10px;width:100%;min-width:0;min-height:42px;padding:7px 12px 7px 8px;text-align:left;color:inherit;font:inherit;cursor:pointer;background:transparent;border:0;border-radius:var(--dsw-radius-md,8px)}
+.ct-tree-link:hover{background:transparent}
+.ct-node-icon{display:flex;flex-shrink:0;color:var(--dsw-alias-label-tertiary,#8b8d94)}
+.ct-node-branch{color:var(--dsw-alias-label-secondary,#60646c)}
+.ct-node-label{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:22px}
+.ct-branch-tag{flex-shrink:0;font-size:11px;color:var(--dsw-alias-label-tertiary,#8b8d94);border:1px solid var(--dsw-alias-border-l2,#e5e5e8);border-radius:4px;padding:0 5px;line-height:18px}
+.ct-row-arrow{display:flex;margin-left:auto;color:var(--dsw-alias-label-secondary,#60646c);opacity:0}
+.ct-tree-link:hover .ct-row-arrow,.ct-tree-link:focus-visible .ct-row-arrow{opacity:1}
+.ct-tree-link:disabled{cursor:wait;opacity:.6}
+.ct-tree .ct-tree-children{margin-left:37px;padding-left:10px;border-left:1px solid var(--dsw-alias-border-l2,#e5e5e8)}
+.ct-tree button:focus-visible{outline:2px solid var(--dsw-alias-state-business-primary,#4d6bfe);outline-offset:1px}
+.ct-workspace-empty{margin:12px 38px;color:var(--dsw-alias-label-tertiary,#8b8d94)}
+.ct-tree-hint{display:flex;align-items:center;gap:8px;margin-top:24px;color:var(--dsw-alias-label-tertiary,#8b8d94);font-size:12px;line-height:20px}
+.ct-tree-hint svg{flex-shrink:0;width:16px;height:16px}
+.ct-tree-empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:64px 16px;color:var(--dsw-alias-label-tertiary,#8b8d94)}
+.ct-tree-empty h2{font-size:15px;font-weight:500;margin:16px 0 0;color:var(--dsw-alias-label-primary,#202124)}
+.ct-tree-empty p{margin:8px 0 12px;line-height:22px}
+.ct-tree-error{display:flex;align-items:center;justify-content:space-between;gap:12px;color:var(--dsw-alias-state-error-primary,#b42318);padding:10px 12px;border:1px solid currentColor;border-radius:8px;margin-bottom:16px;overflow-wrap:anywhere}
+.ct-tree-skeleton{display:flex;flex-direction:column;gap:18px;padding:24px 12px}
+.ct-tree-skeleton i{display:block;height:18px;width:60%;border-radius:4px;background:var(--dsw-alias-bg-layer-1,#f1f2f4)}
+.ct-tree-skeleton i:nth-child(2){width:45%;margin-left:28px}.ct-tree-skeleton i:nth-child(3){width:52%;margin-left:28px}
+@media(max-width:760px){.ct-tree-content{padding:28px 24px}.ct-tree-toolbar{align-items:stretch;flex-direction:column;gap:8px}.ct-tree-expand{align-self:flex-end}.ct-tree-header{margin-bottom:22px}.ct-tree .ct-tree-children{margin-left:22px;padding-left:4px}}
+@media(max-width:420px){.ct-tree-content{padding:24px 16px}.ct-branch-tag{display:none}.ct-tree h1{font-size:22px}.ct-tree .ct-tree-children{margin-left:14px}}
+
+/* DSH 0.2.1's composer paints over the native corner grip. Keep the native
+   pointer handler and persisted geometry, but put its hit area above the body. */
+.ct-branch-float > [data-dockkit-float-resize]{z-index:20;width:24px;height:24px;pointer-events:auto}
+.ct-branch-float > [data-dockkit-float-resize]::after{width:9px;height:9px;right:5px;bottom:5px;opacity:.65}
+.ct-branch-float > [data-dockkit-float-resize]:hover::after,.ct-branch-float > [data-dockkit-float-resize]:active::after{opacity:1}
+
+/* Explicit button surfaces distinguish float actions from the title text. */
+.ct-title-controls{gap:6px;margin-inline:6px}
+.ct-title-controls>.ct-button{gap:5px;min-height:26px;padding:3px 8px;border:1px solid var(--dsw-alias-border-l2,#ddd);border-radius:var(--dsw-radius-sm,5px);background:var(--dsw-alias-bg-layer-1,#f7f7f8);color:var(--dsw-alias-label-primary,#202124);font-size:12px;line-height:18px}
+.ct-title-controls>.ct-button svg{width:14px;height:14px;flex-shrink:0}
+.ct-title-controls>.ct-button:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover,#eeeef0)}
+.ct-title-controls>.ct-button:active:not(:disabled){opacity:.75}
+
+/* When a branch is selected, dedicate the dock strip to its title and actions.
+   Other tabs remain in the native layout and return when the branch leaves. */
+[data-dockkit-strip]:has([data-dockkit-tab][aria-selected="true"] .ct-title)>:not([data-dockkit-strip-tabs]):not(.ct-docked-actions){display:none!important}
+[data-dockkit-strip]:has([data-dockkit-tab][aria-selected="true"] .ct-title) [data-dockkit-tab]:not([aria-selected="true"]),
+[data-dockkit-strip]:has([data-dockkit-tab][aria-selected="true"] .ct-title) [data-dockkit-tab-close]{display:none!important}
+[data-dockkit-strip]:has([data-dockkit-tab][aria-selected="true"] .ct-title) [data-dockkit-strip-tabs]{flex:1;min-width:0;overflow:hidden}
+[data-dockkit-strip]:has([data-dockkit-tab][aria-selected="true"] .ct-title) [data-dockkit-tab][aria-selected="true"]{flex:1;min-width:0;max-width:none;background:transparent;box-shadow:none;border:0}
+[data-dockkit-strip]:has([data-dockkit-tab][aria-selected="true"] .ct-title) [data-dockkit-tab]>:first-child{flex:1;min-width:0;max-width:none}
+.ct-docked-actions{display:none;flex:none;margin-left:auto}
+[data-dockkit-strip]:has([data-dockkit-tab][aria-selected="true"] .ct-title)>.ct-docked-actions.ct-current-actions{display:inline-flex}
+.ct-docked-actions .ct-title-controls{gap:4px;margin-inline:4px}
+.ct-docked-actions .ct-button{width:28px;height:28px;padding:5px}
+.ct-docked-actions .ct-button svg{width:16px;height:16px}

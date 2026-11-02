@@ -1,0 +1,32 @@
+name: Bug report / 问题反馈
+description: Report a reproducible plugin problem / 提交可复现的问题
+title: '[Bug] '
+body:
+  - type: markdown
+    attributes:
+      value: 请勿粘贴 API key、登录 token、完整会话日志或未经脱敏的截图。
+  - type: input
+    id: versions
+    attributes:
+      label: 插件与 DSH 版本
+      placeholder: 插件 1.0.6，DSH 0.2.1-rc.5
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: 操作系统与运行方式
+      placeholder: macOS ARM64，DSH Desktop
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 请说明操作顺序、预期表现和实际表现。
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 脱敏截图或错误信息（可选）
