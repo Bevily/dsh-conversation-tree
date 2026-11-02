@@ -24,17 +24,19 @@ DeepSeek Harness 的原生可编辑会话分支插件。在回答或选段处继
 
 1. 打开 DeepSeek Harness，进入左侧「插件」。
 2. 点击「添加插件」（或箭头菜单中的「安装第三方插件」）。
-3. 在「包名或地址」中粘贴以下 **GitHub 版本链接**，不要加引号：
+3. 在「包名或地址」中粘贴以下 **GitHub 仓库链接**，不要加引号：
 
 ```text
-https://github.com/Bevily/dsh-conversation-tree#v1.0.9
+https://github.com/Bevily/dsh-conversation-tree
 ```
 
 4. 点击「安装」，按提示启用插件或重启应用。
 
 不需要下载 tgz。仓库已提交运行所需的 `client.js`，安装时无需自行编译。
 
-**已安装旧版时也使用上面的版本链接。** DSH 0.2.1-rc.5 存在 Git 地址识别问题：普通仓库 URL 会被保存为 `github:Bevily/dsh-conversation-tree`，再次输入原 URL 时可能报「无法从依赖变更中确定安装了哪一个包」。指定新的版本标签可以让安装器正确识别依赖变化。若明确提示「已经安装」，表示该来源已被识别；不要为重复安装而删除数据。
+**首次安装直接使用仓库链接即可，安装默认分支当前版本。** 已在干净的隔离 profile 中通过真实插件管理器验证；需要重启时按宿主提示操作。
+
+**已安装后的更新与重复安装：** DSH 0.2.1-rc.5 存在 Git 地址识别问题：普通仓库 URL 会被保存为 `github:Bevily/dsh-conversation-tree`，再次输入原 URL 时可能报「无法从依赖变更中确定安装了哪一个包」。更新时可填写 `https://github.com/Bevily/dsh-conversation-tree#v1.0.9`，后续换为新版本标签，让安装器正确识别依赖变化。若明确提示「已经安装」，表示该来源已被识别；不要为重复安装而删除数据。
 
 需要离线安装时，可运行下方开发命令生成 tgz，然后在同一输入框填写文件的本地绝对路径。
 

@@ -116,3 +116,11 @@ npm run pack
 - promote 对存活 Session 不再复制完整历史；已挂接的工作区与未变化的元数据不重复写入。保留单输入框交接与失败恢复顺序。
 - 18 项测试通过，新增覆盖后台读取期间可完成提升、重复提升不写入、不扫描无关历史，以及 50 条消息只发起一次并发状态读取。
 - DSH 0.2.1-rc.5 原生 Web 界面使用隔离测试 profile 验证：侧栏提升、浮窗提升都显示主会话并保留“性能修复后保留草稿”。执行点击至 AX 状态确认完成分别 212ms、244ms，包含自动化观察开销；不是纯页面渲染基准或 Electron 性能保证。
+
+## 无版本后缀的首次安装
+
+2026-11-02：新建临时 DSH_HOME，不通过 CLI 预装插件，直接由测试 Host 插件调用真实 `pluginManager.installBundle('https://github.com/Bevily/dsh-conversation-tree')`。
+
+- 首次调用正确识别 `bundle: dsh-conversation-tree`、`version: 1.0.9`，完成安装与选择，返回 `application: restart-required`、`restartReason: no-hmr`、无警告；测试调用发生在启动早期，未就绪的 HMR 需要重启生效。
+- 在同一 profile 再次调用完全相同的仓库 URL，复现 `ambiguous-install`。首次安装和已安装后的重复安装是不同路径。
+- README 因此以普通 GitHub 仓库 URL 作为首次安装入口，版本后缀仅用于固定版本和规避已安装后的更新识别问题。未修改用户 desktop profile。
