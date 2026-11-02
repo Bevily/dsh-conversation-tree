@@ -104,5 +104,6 @@ npm run pack
 
 - 再次安装普通仓库 URL：pnpm 退出码为 0，但管理器返回 `application: failed`、`error.code: ambiguous-install`，复现桌面截图。
 - 改用 GitHub URL 加提交 `adf12f033133ee2d22f7e40e02c980d49bce5117`：管理器返回 `application: applied`、`bundle: dsh-conversation-tree`、`version: 1.0.8`、`warnings: []`，无需卸载。
+- 推送 `v1.0.8` 标签后重新建立临时 profile，使用 README 中的完整 `https://github.com/Bevily/dsh-conversation-tree#v1.0.8` 链接重复验证，管理器同样返回 `application: applied`、版本 `1.0.8`、无警告。
 - 原因：pnpm 保存的依赖是 `github:` 写法；普通 HTTPS URL 重装不改变依赖值，宿主管理器又以原字符串查找，因而无法识别目标。指定版本 ref 会产生可识别的依赖变化。
 - 未修改 DSH 安装器或用户 desktop profile。桌面安装对话框的最终成功状态尚未验证。
