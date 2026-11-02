@@ -288,7 +288,7 @@ function BranchBody({ useTabInfo, sessions, conversation, SessionProvider, rende
   return /* @__PURE__ */ import_react.default.createElement("div", { className: "ct-native", "data-ct-session": branchId }, error ? /* @__PURE__ */ import_react.default.createElement("div", { className: "ct-state" }, /* @__PURE__ */ import_react.default.createElement(ErrorText, { error }), /* @__PURE__ */ import_react.default.createElement("button", { className: "ct-button", onClick: () => setRetry((n) => n + 1) }, "\u91CD\u8BD5")) : reference && reference.binding.sessionId === branchId ? /* @__PURE__ */ import_react.default.createElement(SessionProvider, { session: reference }, renderSlot("conversation-tree.chat", {})) : /* @__PURE__ */ import_react.default.createElement("div", { className: "ct-state", role: "status" }, "\u6B63\u5728\u6253\u5F00\u5206\u652F\u2026"));
 }
 function BranchTitle({ useTabInfo, sidebarRight, promote }) {
-  const { tab, panel } = useTabInfo();
+  const { tab, panel, sidebar } = useTabInfo();
   const params = tabParams(tab);
   const anchor = (0, import_react.useRef)(null), [host, setHost] = (0, import_react.useState)(null), [docked, setDocked] = (0, import_react.useState)(false), [error, setError] = (0, import_react.useState)(""), [busy, setBusy] = (0, import_react.useState)(false);
   (0, import_react.useEffect)(() => {
@@ -337,6 +337,12 @@ function BranchTitle({ useTabInfo, sidebarRight, promote }) {
         const width = Math.min(480, window.innerWidth - 32), height = Math.min(620, window.innerHeight - 100);
         sidebarRight.float(tab.id, { x: Math.max(16, window.innerWidth - width - 32), y: 64, width, height });
         if (sidebarRight.isExpanded()) sidebarRight.toggleExpanded();
+      } else if (docked) {
+        const target = sidebarRight.focusedTarget(anchor.current);
+        if (!target || !sidebarRight.isTargetCurrent(target)) throw new Error("\u5206\u652F\u9762\u677F\u5C1A\u672A\u5C31\u7EEA\uFF0C\u8BF7\u7A0D\u540E\u91CD\u8BD5\u3002");
+        await api({ action: "promote", sessionId: params.branchId });
+        if (!sidebarRight.isTargetCurrent(target)) throw new Error("\u5206\u652F\u9762\u677F\u5DF2\u5207\u6362\uFF0C\u8BF7\u5728\u5F53\u524D\u5206\u652F\u4E2D\u91CD\u8BD5\u3002");
+        sidebarRight.toggleFullscreen(target);
       } else {
         await promote(params.branchId);
         tab.actions.close();
@@ -347,7 +353,7 @@ function BranchTitle({ useTabInfo, sidebarRight, promote }) {
       setBusy(false);
     }
   };
-  const controls = /* @__PURE__ */ import_react.default.createElement("span", { className: "ct-title-controls", onPointerDown: stop, onClick: stop }, /* @__PURE__ */ import_react.default.createElement("button", { type: "button", className: "ct-button", disabled: busy, onClick: (e) => act(e, docked ? "float" : "dock"), "aria-label": docked ? "\u9000\u56DE\u5C0F\u7A97" : "\u4FA7\u680F", title: docked ? "\u9000\u56DE\u5C0F\u7A97" : "\u505C\u9760\u5230\u53F3\u4FA7\u680F" }, /* @__PURE__ */ import_react.default.createElement(TreeIcon, { kind: docked ? "window" : "panel" }), !docked && "\u4FA7\u680F"), /* @__PURE__ */ import_react.default.createElement("button", { type: "button", className: "ct-button", disabled: busy, onClick: (e) => act(e, "full"), "aria-label": "\u5168\u5C4F", title: "\u5728\u4E3B\u9875\u9762\u6253\u5F00\u5206\u652F" }, /* @__PURE__ */ import_react.default.createElement(TreeIcon, { kind: "expand" }), !docked && "\u5168\u5C4F"), /* @__PURE__ */ import_react.default.createElement(ErrorText, { error }));
+  const controls = /* @__PURE__ */ import_react.default.createElement("span", { className: "ct-title-controls", onPointerDown: stop, onClick: stop }, /* @__PURE__ */ import_react.default.createElement("button", { type: "button", className: "ct-button", disabled: busy, onClick: (e) => act(e, docked ? "float" : "dock"), "aria-label": docked ? "\u9000\u56DE\u5C0F\u7A97" : "\u4FA7\u680F", title: docked ? "\u9000\u56DE\u5C0F\u7A97" : "\u505C\u9760\u5230\u53F3\u4FA7\u680F" }, /* @__PURE__ */ import_react.default.createElement(TreeIcon, { kind: docked ? "window" : "panel" }), !docked && "\u4FA7\u680F"), /* @__PURE__ */ import_react.default.createElement("button", { type: "button", className: "ct-button", disabled: busy, onClick: (e) => act(e, "full"), "aria-label": docked && sidebar.fullscreen ? "\u8FD8\u539F\u4FA7\u680F" : "\u5168\u5C4F", title: docked ? sidebar.fullscreen ? "\u8FD8\u539F\u4E3A\u53F3\u4FA7\u680F" : "\u5C55\u5F00\u5206\u652F\u9762\u677F" : "\u5728\u4E3B\u9875\u9762\u6253\u5F00\u5206\u652F" }, /* @__PURE__ */ import_react.default.createElement(TreeIcon, { kind: docked && sidebar.fullscreen ? "panel" : "expand" }), !docked && "\u5168\u5C4F"), /* @__PURE__ */ import_react.default.createElement(ErrorText, { error }));
   return /* @__PURE__ */ import_react.default.createElement(import_react.default.Fragment, null, /* @__PURE__ */ import_react.default.createElement("span", { ref: anchor, className: "ct-title", title: params.label || "\u5206\u652F\u4F1A\u8BDD" }, params.label || "\u5206\u652F\u4F1A\u8BDD"), host ? (0, import_react_dom.createPortal)(controls, host) : null);
 }
 function SelectionAction({ uiSession, openBranch }) {

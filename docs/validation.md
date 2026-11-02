@@ -48,6 +48,15 @@
 
 ![精简侧栏标题栏](images/sidebar-branch.png)
 
+## 1.0.7 侧栏全屏切换
+
+- 旧行为将分支打开为主会话后关闭侧栏 tab；侧栏全屏现在改用 `sidebarRight.toggleFullscreen`，不关闭 tab、不导航离开父会话。
+- 在同一隔离 DSH Web 会话验证：侧栏全屏后仍为相同 branch Session，宽度从约 575px 展开至 1279px，输入框“保留这段草稿”仍在；还原后宽度返回约 575px，再次全屏及退回小窗均成功。
+- 继续保留 promote 可见性语义，分支出现在正式列表中；数据格式不变。
+- 本次未在 Electron 主窗口验收。
+
+![侧栏全屏保留草稿](images/sidebar-fullscreen.png)
+
 ## 在线模型验收限制
 
 在线模型测试因账户额度耗尽返回 `ACCOUNT_QUOTA`。原生错误态正常，但在线成功回复、成功流式和完整多轮流程未通过。本地测试 provider 的结果不代表在线 DeepSeek 成功。

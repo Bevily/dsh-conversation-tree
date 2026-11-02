@@ -2,7 +2,7 @@
 
 DeepSeek Harness 的原生可编辑会话分支插件。在回答或选段处继续追问，通过浮窗、侧栏和会话树管理探索过程。
 
-这是独立的社区插件，与 DeepSeek 官方没有隶属关系。当前版本 **1.0.6**；已在 **DSH 0.2.1-rc.5、macOS ARM64 的隔离 Web profile** 验收。Electron 桌面版的逐项验收尚未完成，其他宿主版本及平台需要复测。
+这是独立的社区插件，与 DeepSeek 官方没有隶属关系。当前版本 **1.0.7**；已在 **DSH 0.2.1-rc.5、macOS ARM64 的隔离 Web profile** 验收。Electron 桌面版的逐项验收尚未完成，其他宿主版本及平台需要复测。
 
 ## 功能
 
@@ -22,10 +22,10 @@ DeepSeek Harness 的原生可编辑会话分支插件。在回答或选段处继
 
 ## 安装
 
-1. 在本仓库 [Releases](https://github.com/Bevily/dsh-conversation-tree/releases) 页面下载 `dsh-conversation-tree-1.0.6.tgz`。请选择 Release 附件；GitHub 自动生成的 Source code 压缩包是源码，不是插件安装包。
+1. 在本仓库 [Releases](https://github.com/Bevily/dsh-conversation-tree/releases) 页面下载 `dsh-conversation-tree-1.0.7.tgz`。请选择 Release 附件；GitHub 自动生成的 Source code 压缩包是源码，不是插件安装包。
 2. 打开 DeepSeek Harness，进入左侧「插件」。
 3. 点击「添加插件」（或箭头菜单中的「安装第三方插件」）。
-4. 在「包名或地址」中粘贴下载文件的本地绝对路径，**不要加引号**。例如 macOS 路径格式：`/Users/你的用户名/Downloads/dsh-conversation-tree-1.0.6.tgz`。
+4. 在「包名或地址」中粘贴下载文件的本地绝对路径，**不要加引号**。例如 macOS 路径格式：`/Users/你的用户名/Downloads/dsh-conversation-tree-1.0.7.tgz`。
 5. 点击「安装」，按提示启用插件或重启应用。
 
 首次公开 Release 尚需发布；也可按下方开发步骤自行构建安装包。
@@ -33,7 +33,7 @@ DeepSeek Harness 的原生可编辑会话分支插件。在回答或选段处继
 桌面版的 `desktop` profile 由 Electron 应用独占管理，不能使用 `dsh plugin --profile desktop add` 安装。CLI 仅用于非 Electron 管理的 profile，例如隔离测试使用的 `web` profile：
 
 ```sh
-dsh plugin --profile web add /absolute/path/dsh-conversation-tree-1.0.6.tgz
+dsh plugin --profile web add /absolute/path/dsh-conversation-tree-1.0.7.tgz
 ```
 
 ### 升级
@@ -46,7 +46,7 @@ dsh plugin --profile web add /absolute/path/dsh-conversation-tree-1.0.6.tgz
 
 1. 将父会话放在工作区中。在已完成回答的操作行点击“分支”，或在同一轮消息内划词并点击“从这里追问”。
 2. 浮窗打开后可继续输入问题，拖动标题栏移动，拖动右下角标记调整宽高。
-3. 点击“侧栏”停靠到右侧；侧栏标题旁的两个图标分别为“退回小窗”和“全屏”，悬停可查看提示。“全屏”会将分支提升为正式会话并在主页面打开。
+3. 点击“侧栏”停靠到右侧；侧栏标题旁的两个图标分别为“退回小窗”和“全屏”，悬停可查看提示。侧栏中的“全屏”展开当前分支面板，保留输入框草稿，再次点击“还原侧栏”返回分栏；浮窗中的“全屏”在主页面打开分支。两种操作都会将分支提升为正式会话。
 4. 分支最后一条独立完成的回答可“钉回主线”。摘录进入父会话原生草稿，保留原有草稿，由用户手动发送。
 5. 在“会话树”搜索、展开或打开正式会话与已提升分支。未全屏提升的分支不展示。
 
@@ -76,7 +76,7 @@ npm run pack
 
 该命令完成构建、语法检查和测试，并生成：
 
-- `dist/dsh-conversation-tree-1.0.6.tgz`
+- `dist/dsh-conversation-tree-1.0.7.tgz`
 - `dist/SHA256SUMS`
 
 `src/host` 管理分支与持久化，`src/client` 管理原生 slot 接线与树页面。`client.js` 是需要随源码提交的构建产物；React 由 DSH 宿主提供。

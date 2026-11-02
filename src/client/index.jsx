@@ -82,7 +82,7 @@ function BranchBody({ useTabInfo, sessions, conversation, SessionProvider, rende
   return <div className="ct-native" data-ct-session={branchId}>{error ? <div className="ct-state"><ErrorText error={error}/><button className="ct-button" onClick={() => setRetry(n => n + 1)}>重试</button></div> : reference && reference.binding.sessionId === branchId ? <SessionProvider session={reference}>{renderSlot('conversation-tree.chat', {})}</SessionProvider> : <div className="ct-state" role="status">正在打开分支…</div>}</div>;
 }
 function BranchTitle({ useTabInfo, sidebarRight, promote }) {
-  const { tab, panel } = useTabInfo();
+  const { tab, panel, sidebar } = useTabInfo();
   const params = tabParams(tab);
   const anchor = useRef(null), [host, setHost] = useState(null), [docked, setDocked] = useState(false), [error, setError] = useState(''), [busy, setBusy] = useState(false);
   useEffect(() => {
@@ -115,12 +115,20 @@ function BranchTitle({ useTabInfo, sidebarRight, promote }) {
         sidebarRight.float(tab.id, { x: Math.max(16, window.innerWidth - width - 32), y: 64, width, height });
         if (sidebarRight.isExpanded()) sidebarRight.toggleExpanded();
       }
+      else if (docked) {
+        const target = sidebarRight.focusedTarget(anchor.current);
+        if (!target || !sidebarRight.isTargetCurrent(target)) throw new Error('分支面板尚未就绪，请稍后重试。');
+        // Keep this native tab and its composer mounted while changing the panel mode.
+        await api({ action: 'promote', sessionId: params.branchId });
+        if (!sidebarRight.isTargetCurrent(target)) throw new Error('分支面板已切换，请在当前分支中重试。');
+        sidebarRight.toggleFullscreen(target);
+      }
       else { await promote(params.branchId); tab.actions.close(); }
     } catch (e) { setError(e.message); } finally { setBusy(false); }
   };
   const controls = <span className="ct-title-controls" onPointerDown={stop} onClick={stop}>
     <button type="button" className="ct-button" disabled={busy} onClick={e => act(e, docked ? 'float' : 'dock')} aria-label={docked ? '退回小窗' : '侧栏'} title={docked ? '退回小窗' : '停靠到右侧栏'}><TreeIcon kind={docked ? 'window' : 'panel'}/>{!docked && '侧栏'}</button>
-    <button type="button" className="ct-button" disabled={busy} onClick={e => act(e, 'full')} aria-label="全屏" title="在主页面打开分支"><TreeIcon kind="expand"/>{!docked && '全屏'}</button><ErrorText error={error}/>
+    <button type="button" className="ct-button" disabled={busy} onClick={e => act(e, 'full')} aria-label={docked && sidebar.fullscreen ? '还原侧栏' : '全屏'} title={docked ? sidebar.fullscreen ? '还原为右侧栏' : '展开分支面板' : '在主页面打开分支'}><TreeIcon kind={docked && sidebar.fullscreen ? 'panel' : 'expand'}/>{!docked && '全屏'}</button><ErrorText error={error}/>
   </span>;
   return <><span ref={anchor} className="ct-title" title={params.label || '分支会话'}>{params.label || '分支会话'}</span>{host ? createPortal(controls, host) : null}</>;
 
