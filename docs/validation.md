@@ -48,7 +48,7 @@
 
 ![精简侧栏标题栏](images/sidebar-branch.png)
 
-## 1.0.7 侧栏全屏切换
+## 1.0.7 侧栏全屏切换（此语义已在 1.0.8 更正）
 
 - 旧行为将分支打开为主会话后关闭侧栏 tab；侧栏全屏现在改用 `sidebarRight.toggleFullscreen`，不关闭 tab、不导航离开父会话。
 - 在同一隔离 DSH Web 会话验证：侧栏全屏后仍为相同 branch Session，宽度从约 575px 展开至 1279px，输入框“保留这段草稿”仍在；还原后宽度返回约 575px，再次全屏及退回小窗均成功。
@@ -56,6 +56,15 @@
 - 本次未在 Electron 主窗口验收。
 
 ![侧栏全屏保留草稿](images/sidebar-fullscreen.png)
+
+## 1.0.8 提升为普通会话
+
+- “全屏”恢复为普通会话提升；不调用原生面板全屏 API。分支 retained source 从 mainView 改为 sidebarView，避免嵌入分支持有主视图身份。
+- `openSession` 返回 void，不能用 await 判定切换完成；现在保留 sidebarView 引用并同步卸载旧 tab 的嵌入输入框，再打开主聊天区并订阅原生 current binding 确认目标 Session。超时或调用失败时重新打开分支。
+- 新增两项导航回归测试，覆盖异步切换确认与失败/超时恢复标签，共 13 项测试通过。
+- 实际 DSH Web 验收：侧栏提升后主列表选中目标 branch Session，显示原生对话/轨迹标签、模型及权限控件；草稿“交接验证：这段草稿应保留”可见。浮窗提升同样成功，草稿保留。
+
+![提升后的普通会话](images/promoted-session.png)
 
 ## 在线模型验收限制
 
