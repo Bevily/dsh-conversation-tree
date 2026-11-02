@@ -68,11 +68,48 @@ test('failed workspace attach is recovered without creating duplicate sessions',
   f.failAttach(false); const result = await f.service.handle(request);
   assert.equal(result.reused, true); assert.equal(f.creations(), 1);
 });
-test('catalog identifies only the last independent completed answer for pinning', async () => {
+test('branch status identifies only the last independent completed answer for pinning', async () => {
   const f = await fixture(), { branch } = await f.service.handle({ action: 'fork', sessionId: 'parent', turn: 1 });
-  let catalog = await f.service.handle({ action: 'catalog' });
-  assert.equal(catalog.sessions.find(s => s.id === branch.sessionId).lastOwnMessageId, undefined);
+  let status = await f.service.handle({ action: 'branch-status', sessionId: branch.sessionId });
+  assert.equal(status.lastOwnMessageId, null);
   const child = f.sessions.get(branch.sessionId); for (const e of events()) child.append(e.type, e.data);
-  catalog = await f.service.handle({ action: 'catalog' });
-  assert.equal(catalog.sessions.find(s => s.id === branch.sessionId).lastOwnMessageId, 'a2');
+  status = await f.service.handle({ action: 'branch-status', sessionId: branch.sessionId });
+  assert.equal(status.lastOwnMessageId, 'a2');
+});
+test('slow catalog history reads do not block promotion', async () => {
+  const f = await fixture(), { branch } = await f.service.handle({ action: 'fork', sessionId: 'parent', turn: 1 });
+  const workspace = f.ctx.get('workspaceRegistry').list()[0];
+  workspace.sessionIds.push('slow');
+  let entered, release;
+  const started = new Promise(resolve => { entered = resolve; });
+  const blocked = new Promise(resolve => { release = resolve; });
+  const original = f.ctx.sessionQuery.readSession;
+  f.ctx.sessionQuery.readSession = async id => {
+    if (id !== 'slow') return original(id);
+    entered(); await blocked; return { events: [], header: { id } };
+  };
+  const catalog = f.service.handle({ action: 'catalog' });
+  await started;
+  let timeout;
+  try {
+    const promoted = await Promise.race([
+      f.service.handle({ action: 'promote', sessionId: branch.sessionId }),
+      new Promise((_, reject) => { timeout = setTimeout(() => reject(new Error('promotion waited for unrelated history')), 500); }),
+    ]);
+    assert.equal(promoted.branch.visible, true);
+  } finally { clearTimeout(timeout); release(); await catalog; }
+});
+test('promotion avoids live history snapshots and repeated workspace writes', async () => {
+  const f = await fixture(), { branch } = await f.service.handle({ action: 'fork', sessionId: 'parent', turn: 1 });
+  f.sessions.get(branch.sessionId).snapshotEvents = () => { throw new Error('promotion copied history'); };
+  f.failAttach(true);
+  await f.service.handle({ action: 'promote', sessionId: branch.sessionId });
+  f.store.write = async () => { throw new Error('unchanged promotion rewrote metadata'); };
+  await f.service.handle({ action: 'promote', sessionId: branch.sessionId });
+});
+test('message action status does not read unrelated session histories', async () => {
+  const f = await fixture(), { branch } = await f.service.handle({ action: 'fork', sessionId: 'parent', turn: 1 });
+  f.sessions.get('parent').snapshotEvents = () => { throw new Error('unrelated history read'); };
+  assert.deepEqual(await f.service.handle({ action: 'branch-status', sessionId: 'parent' }), { lastOwnMessageId: null });
+  assert.deepEqual(await f.service.handle({ action: 'branch-status', sessionId: branch.sessionId }), { lastOwnMessageId: null });
 });

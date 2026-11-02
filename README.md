@@ -2,7 +2,7 @@
 
 DeepSeek Harness 的原生可编辑会话分支插件。在回答或选段处继续追问，通过浮窗、侧栏和会话树管理探索过程。
 
-这是独立的社区插件，与 DeepSeek 官方没有隶属关系。当前版本 **1.0.8**；已在 **DSH 0.2.1-rc.5、macOS ARM64 的隔离 Web profile** 验收。Electron 桌面版的逐项验收尚未完成，其他宿主版本及平台需要复测。
+这是独立的社区插件，与 DeepSeek 官方没有隶属关系。当前版本 **1.0.9**；已在 **DSH 0.2.1-rc.5、macOS ARM64 的隔离 Web profile** 验收。Electron 桌面版的逐项验收尚未完成，其他宿主版本及平台需要复测。
 
 ## 功能
 
@@ -27,7 +27,7 @@ DeepSeek Harness 的原生可编辑会话分支插件。在回答或选段处继
 3. 在「包名或地址」中粘贴以下 **GitHub 版本链接**，不要加引号：
 
 ```text
-https://github.com/Bevily/dsh-conversation-tree#v1.0.8
+https://github.com/Bevily/dsh-conversation-tree#v1.0.9
 ```
 
 4. 点击「安装」，按提示启用插件或重启应用。
@@ -41,12 +41,12 @@ https://github.com/Bevily/dsh-conversation-tree#v1.0.8
 桌面版的 `desktop` profile 由 Electron 应用独占管理，不能使用 `dsh plugin --profile desktop add` 安装。CLI 仅用于非 Electron 管理的 profile，例如隔离测试使用的 `web` profile：
 
 ```sh
-dsh plugin --profile web add /absolute/path/dsh-conversation-tree-1.0.8.tgz
+dsh plugin --profile web add /absolute/path/dsh-conversation-tree-1.0.9.tgz
 ```
 
 ### 升级
 
-操作前备份 `$DSH_HOME/plugins/conversation-tree/state.json` 以及原生 Session 数据。优先直接安装新版本的 GitHub 标签链接（例如将 `#v1.0.8` 换成后续已发布的标签）；不要同时加载两个会话树实现。更新后确认 Host 的 `conversation-tree` 和 Client 插件均激活。
+操作前备份 `$DSH_HOME/plugins/conversation-tree/state.json` 以及原生 Session 数据。优先直接安装新版本的 GitHub 标签链接（例如将 `#v1.0.9` 换成后续已发布的标签）；不要同时加载两个会话树实现。更新后确认 Host 的 `conversation-tree` 和 Client 插件均激活。
 
 插件不主动迁移原生 Session；关系元数据保持 version 1 格式，遇到损坏或不支持的状态文件会报错，不会静默覆盖。
 
@@ -84,7 +84,7 @@ npm run pack
 
 该命令完成构建、语法检查和测试，并生成：
 
-- `dist/dsh-conversation-tree-1.0.8.tgz`
+- `dist/dsh-conversation-tree-1.0.9.tgz`
 - `dist/SHA256SUMS`
 
 `src/host` 管理分支与持久化，`src/client` 管理原生 slot 接线与树页面。`client.js` 是需要随源码提交的构建产物；React 由 DSH 宿主提供。

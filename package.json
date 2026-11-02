@@ -1,6 +1,6 @@
 {
   "name": "dsh-conversation-tree",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "description": "Native, writable conversation branches for DeepSeek Harness",
   "type": "module",

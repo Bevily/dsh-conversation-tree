@@ -3,6 +3,7 @@ import { createPortal, flushSync } from 'react-dom';
 import css from './style.css';
 import { buildTree } from './tree-model.js';
 import { openPromotedSession } from './navigation.js';
+import { coalesceReads } from './requests.js';
 
 const KIND = 'dsh-conversation-tree/branch';
 const ADDRESS = 'dsh-resource://conversation-tree/session/';
@@ -21,6 +22,7 @@ function hiddenStyle() {
   if (!element) { element = document.createElement('style'); element.id = 'ct-hidden'; document.head.append(element); }
   element.textContent = [...hidden].map(id => `[data-row-key="session:${CSS.escape(id)}"]{display:none!important}`).join('\n');
 }
+const branchStatus = coalesceReads(sessionId => api({ action: 'branch-status', sessionId }));
 async function api(body) {
   const response = await fetch('/api/conversation-tree', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
   const payload = await response.json().catch(() => ({ error: response.status === 401 ? 'DSH 连接已过期，请刷新页面后重试。' : `请求失败（${response.status}）` }));
@@ -38,7 +40,11 @@ function BranchAction({ sessionId, messageId, openBranch, pin, useSession }) {
   const running = useSession(s => s.running);
   const [busy, setBusy] = useState(false), [error, setError] = useState('');
   const [isBranch, setIsBranch] = useState(false);
-  useEffect(() => { let live = true; api({ action: 'catalog' }).then(c => { if (live) setIsBranch(!running && c.branches.some(b => b.sessionId === sessionId) && c.sessions.some(s => s.id === sessionId && s.lastOwnMessageId === messageId)); }).catch(() => {}); return () => { live = false; }; }, [sessionId, messageId, running]);
+  useEffect(() => {
+    let live = true; setIsBranch(false);
+    if (!running) branchStatus(sessionId).then(status => { if (live) setIsBranch(status.lastOwnMessageId === messageId); }).catch(() => {});
+    return () => { live = false; };
+  }, [sessionId, messageId, running]);
   const run = async action => {
     if (busy) return; setBusy(true); setError('');
     try {

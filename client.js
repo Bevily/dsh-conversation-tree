@@ -188,6 +188,18 @@ async function openPromotedSession({ sessionId, uiWorkspace, current, detach, re
   }
 }
 
+// src/client/requests.js
+function coalesceReads(read) {
+  const pending = /* @__PURE__ */ new Map();
+  return (key) => {
+    if (!pending.has(key)) {
+      const request = Promise.resolve().then(() => read(key)).finally(() => pending.delete(key));
+      pending.set(key, request);
+    }
+    return pending.get(key);
+  };
+}
+
 // src/client/index.jsx
 var KIND = "dsh-conversation-tree/branch";
 var ADDRESS = "dsh-resource://conversation-tree/session/";
@@ -216,6 +228,7 @@ function hiddenStyle() {
   }
   element.textContent = [...hidden].map((id) => `[data-row-key="session:${CSS.escape(id)}"]{display:none!important}`).join("\n");
 }
+var branchStatus = coalesceReads((sessionId) => api({ action: "branch-status", sessionId }));
 async function api(body) {
   const response = await fetch("/api/conversation-tree", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
   const payload = await response.json().catch(() => ({ error: response.status === 401 ? "DSH \u8FDE\u63A5\u5DF2\u8FC7\u671F\uFF0C\u8BF7\u5237\u65B0\u9875\u9762\u540E\u91CD\u8BD5\u3002" : `\u8BF7\u6C42\u5931\u8D25\uFF08${response.status}\uFF09` }));
@@ -240,8 +253,9 @@ function BranchAction({ sessionId, messageId, openBranch, pin, useSession }) {
   const [isBranch, setIsBranch] = (0, import_react.useState)(false);
   (0, import_react.useEffect)(() => {
     let live = true;
-    api({ action: "catalog" }).then((c) => {
-      if (live) setIsBranch(!running && c.branches.some((b) => b.sessionId === sessionId) && c.sessions.some((s) => s.id === sessionId && s.lastOwnMessageId === messageId));
+    setIsBranch(false);
+    if (!running) branchStatus(sessionId).then((status) => {
+      if (live) setIsBranch(status.lastOwnMessageId === messageId);
     }).catch(() => {
     });
     return () => {
