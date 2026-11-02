@@ -97,3 +97,12 @@ npm run pack
 ```
 
 脚本创建临时 DSH_HOME、安装 tgz、注册 test-only provider，不加载用户凭据。打开输出的 localhost token URL，按 README 操作；发送“测试错误”可检查原生错误块。脚本退出时清理其临时 profile。临时 profile 在验证结束后清理；公开截图保留于 docs/images。
+
+## GitHub 链接安装与更新识别
+
+2026-11-02：使用桌面版随附的 DSH 0.2.1-rc.5 运行时，建立临时 Web profile，先安装普通 GitHub URL，再通过测试专用 Host 插件调用真实 `ctx.pluginManager.installBundle`（默认 HMR 开启），不是仅检查 CLI/pnpm 的退出状态。
+
+- 再次安装普通仓库 URL：pnpm 退出码为 0，但管理器返回 `application: failed`、`error.code: ambiguous-install`，复现桌面截图。
+- 改用 GitHub URL 加提交 `adf12f033133ee2d22f7e40e02c980d49bce5117`：管理器返回 `application: applied`、`bundle: dsh-conversation-tree`、`version: 1.0.8`、`warnings: []`，无需卸载。
+- 原因：pnpm 保存的依赖是 `github:` 写法；普通 HTTPS URL 重装不改变依赖值，宿主管理器又以原字符串查找，因而无法识别目标。指定版本 ref 会产生可识别的依赖变化。
+- 未修改 DSH 安装器或用户 desktop profile。桌面安装对话框的最终成功状态尚未验证。

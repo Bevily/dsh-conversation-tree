@@ -22,13 +22,21 @@ DeepSeek Harness 的原生可编辑会话分支插件。在回答或选段处继
 
 ## 安装
 
-1. 在本仓库 [Releases](https://github.com/Bevily/dsh-conversation-tree/releases) 页面下载 `dsh-conversation-tree-1.0.8.tgz`。请选择 Release 附件；GitHub 自动生成的 Source code 压缩包是源码，不是插件安装包。
-2. 打开 DeepSeek Harness，进入左侧「插件」。
-3. 点击「添加插件」（或箭头菜单中的「安装第三方插件」）。
-4. 在「包名或地址」中粘贴下载文件的本地绝对路径，**不要加引号**。例如 macOS 路径格式：`/Users/你的用户名/Downloads/dsh-conversation-tree-1.0.8.tgz`。
-5. 点击「安装」，按提示启用插件或重启应用。
+1. 打开 DeepSeek Harness，进入左侧「插件」。
+2. 点击「添加插件」（或箭头菜单中的「安装第三方插件」）。
+3. 在「包名或地址」中粘贴以下 **GitHub 版本链接**，不要加引号：
 
-首次公开 Release 尚需发布；也可按下方开发步骤自行构建安装包。
+```text
+https://github.com/Bevily/dsh-conversation-tree#v1.0.8
+```
+
+4. 点击「安装」，按提示启用插件或重启应用。
+
+不需要下载 tgz。仓库已提交运行所需的 `client.js`，安装时无需自行编译。
+
+**已安装旧版时也使用上面的版本链接。** DSH 0.2.1-rc.5 存在 Git 地址识别问题：普通仓库 URL 会被保存为 `github:Bevily/dsh-conversation-tree`，再次输入原 URL 时可能报「无法从依赖变更中确定安装了哪一个包」。指定新的版本标签可以让安装器正确识别依赖变化。若明确提示「已经安装」，表示该来源已被识别；不要为重复安装而删除数据。
+
+需要离线安装时，可运行下方开发命令生成 tgz，然后在同一输入框填写文件的本地绝对路径。
 
 桌面版的 `desktop` profile 由 Electron 应用独占管理，不能使用 `dsh plugin --profile desktop add` 安装。CLI 仅用于非 Electron 管理的 profile，例如隔离测试使用的 `web` profile：
 
@@ -38,7 +46,7 @@ dsh plugin --profile web add /absolute/path/dsh-conversation-tree-1.0.8.tgz
 
 ### 升级
 
-操作前备份 `$DSH_HOME/plugins/conversation-tree/state.json` 以及原生 Session 数据。同名第三方插件可能需要先卸载旧版再安装；不要同时加载两个会话树实现。更新后确认 Host 的 `conversation-tree` 和 Client 插件均激活。
+操作前备份 `$DSH_HOME/plugins/conversation-tree/state.json` 以及原生 Session 数据。优先直接安装新版本的 GitHub 标签链接（例如将 `#v1.0.8` 换成后续已发布的标签）；不要同时加载两个会话树实现。更新后确认 Host 的 `conversation-tree` 和 Client 插件均激活。
 
 插件不主动迁移原生 Session；关系元数据保持 version 1 格式，遇到损坏或不支持的状态文件会报错，不会静默覆盖。
 
